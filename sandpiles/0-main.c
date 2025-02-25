@@ -1,11 +1,12 @@
 #include "sandpiles.h"
+#include <stdlib.h>
 
 /**
  * print_grid_sum - Prints two 3x3 grids side by side
  * @grid1: Left 3x3 grid
  * @grid2: Right 3x3 grid
  */
-void print_grid_sum(int grid1[3][3], int grid2[3][3])
+static void print_grid_sum(int grid1[3][3], int grid2[3][3])
 {
 	int i, j;
 
@@ -30,6 +31,21 @@ void print_grid_sum(int grid1[3][3], int grid2[3][3])
 	}
 }
 
+static void print_grid(int grid[3][3])
+{
+    int i, j;
+
+    for (i = 0; i < 3; i++)
+    {
+        for (j = 0; j < 3; j++)
+        {
+            if (j)
+                printf(" ");
+            printf("%d", grid[i][j]);
+        }
+        printf("\n");
+    }
+}
 /**
  * main - Entry point, tests the sandpiles_sum function
  * Return: EXIT_SUCCESS
