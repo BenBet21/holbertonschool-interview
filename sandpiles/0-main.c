@@ -9,7 +9,7 @@
  * @grid2: Right 3x3 grid
  *
  */
-void print_grid_sum(int grid1[3][3], int grid2[3][3])
+static void print_grid_sum(int grid1[3][3], int grid2[3][3])
 {
     int i, j;
 
