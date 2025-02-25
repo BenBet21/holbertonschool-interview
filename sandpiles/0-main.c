@@ -1,13 +1,9 @@
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "sandpiles.h"
 
 /**
- * print_grid_sum - Print 3x3 grids sum
+ * print_grid_sum - Prints two 3x3 grids side by side
  * @grid1: Left 3x3 grid
  * @grid2: Right 3x3 grid
- *
  */
 void print_grid_sum(int grid1[3][3], int grid2[3][3])
 {
@@ -35,23 +31,24 @@ void print_grid_sum(int grid1[3][3], int grid2[3][3])
 }
 
 /**
- * main - Entry point
- *
- * Return: EXIT_SUCCESS or EXIT_FAILURE
+ * main - Entry point, tests the sandpiles_sum function
+ * Return: EXIT_SUCCESS
  */
 int main(void)
 {
 	int grid1[3][3] = {
-			{3, 3, 3},
-			{3, 3, 3},
-			{3, 3, 3}};
+		{3, 3, 3},
+		{3, 3, 3},
+		{3, 3, 3}
+	};
+
 	int grid2[3][3] = {
-			{1, 3, 1},
-			{3, 3, 3},
-			{1, 3, 1}};
+		{1, 3, 1},
+		{3, 3, 3},
+		{1, 3, 1}
+	};
 
 	print_grid_sum(grid1, grid2);
-
 	sandpiles_sum(grid1, grid2);
 
 	printf("=\n");
