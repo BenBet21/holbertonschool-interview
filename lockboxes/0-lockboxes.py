@@ -1,15 +1,27 @@
 #!/usr/bin/python3
+"""
+Module to determine if all boxes can be unlocked.
+"""
+
+
 def canUnlockAll(boxes):
-    n = len(boxes)
-    opened = set([0])  # On commence avec la boîte 0 ouverte
-    keys = [0]         # Liste des boîtes à visiter (on commence par la 0)
+    """
+    Determines if all the boxes can be opened.
+
+    Args:
+        boxes (list of lists): Each box may contain keys to other boxes.
+
+    Returns:
+        bool: True if all boxes can be opened, False otherwise.
+    """
+    opened = set([0])
+    keys = [0]
 
     while keys:
-        current = keys.pop()  # On prend une boîte à ouvrir
+        current = keys.pop()
         for key in boxes[current]:
             if key < len(boxes) and key not in opened:
-                opened.add(key) # On ajoute la boîte à visiter si elle n'est pas déjà ouverte
-                keys.append(key) #On la met dans keys pour l’ouvrir plus tard
-                
-    # On vérifie si toutes les boîtes sont ouvertes
+                opened.add(key)
+                keys.append(key)
+
     return len(opened) == len(boxes)
