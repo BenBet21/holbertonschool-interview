@@ -1,9 +1,10 @@
-#ifndef SORT_H
-#define SORT_H
+#ifndef TRI_H
+#define TRI_H
 
 #include <stddef.h>
 
-void radix_sort(int *array, size_t size);
-void print_array(const int *array, size_t size);
+/* Déclaration des fonctions principales */
+void tri_radix(int *tableau, size_t taille);
+void print_tableau(const int *tableau, size_t taille);
 
-#endif /* SORT_H */
+#endif /* TRI_H */
