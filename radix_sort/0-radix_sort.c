@@ -1,5 +1,26 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "sort.h"
+
+/**
+ * print_tableau - Affiche les éléments d'un tableau d'entiers
+ * @tableau: Le tableau à afficher
+ * @taille: Le nombre d'éléments dans le tableau
+ *
+ * Affiche les éléments séparés par une virgule et un espace.
+ */
+void print_array(const int *array, size_t size)
+{
+    size_t i;
+    for (i = 0; i < size; i++)
+    {
+        if (i > 0)
+            printf(", ");
+        printf("%d", array[i]);
+    }
+    printf("\n");
+}
 
 /**
  * trouver_maximum - Cherche la plus grande valeur dans un tableau
@@ -90,6 +111,6 @@ void tri_radix(int *tableau, size_t taille)
     for (exposant = 1; maximum / exposant > 0; exposant *= 10)
     {
         tri_comptage_chiffre(tableau, taille, exposant);
-        print_array(tableau, taille); // Affiche le tableau à chaque étape
+    print_array(tableau, taille); // Affiche le tableau à chaque étape
     }
 }
