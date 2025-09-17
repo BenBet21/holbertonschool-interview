@@ -33,7 +33,6 @@ static int get_max(int *array, size_t size)
 }
 
 /**
-/**
  * counting_sort_radix - Counting sort for a specific digit (exp)
  * @array: Pointer to the array to sort
  * @size: Number of elements in the array
