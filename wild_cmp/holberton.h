@@ -1,6 +1,6 @@
 #ifndef HOLBERTON_H
 #define HOLBERTON_H
 
-int comparaison_sauvage(char *chaine1, char *chaine2);
+int wildcmp(char *s1, char *s2);
 
 #endif /* HOLBERTON_H */
