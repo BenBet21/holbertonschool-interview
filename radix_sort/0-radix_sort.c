@@ -1,99 +1,90 @@
-#include <stddef.h>
-#include <stdio.h>
-
 #include "sort.h"
-#include <stdlib.h>
-#include <stddef.h>
-#include <stdio.h>
+#include <stdlib.h> /* Nécessaire pour malloc et free */
+
 /**
- * trouver_maximum - Cherche la plus grande valeur dans un tableau
- * @tableau: Le tableau de nombres dans lequel on va chercher
- * @taille: Le nombre d'éléments présents dans le tableau
+ * get_max - Trouve la valeur maximale dans un tableau
+ * @array: pointeur vers le tableau d'entiers
+ * @size: nombre d'éléments dans le tableau
+ * Return: la plus grande valeur trouvée
  *
- * Cette fonction parcourt chaque case du tableau et garde en mémoire
- * la plus grande valeur trouvée.
- *
- * Return: La valeur la plus élevée contenue dans le tableau
+ * Cette fonction parcourt le tableau pour identifier l'élément le plus grand.
+ * Elle est utilisée dans l'algorithme Radix Sort afin de savoir jusqu'à
+ * quel chiffre il faut trier.
  */
-static int trouver_maximum(int *tableau, size_t taille)
+static int get_max(int *array, size_t size)
 {
-    size_t indice;
-    int maximum = tableau[0];
+	size_t i;
+	int max = array[0]; /* On suppose que le premier élément est le plus grand au départ */
 
-    for (indice = 1; indice < taille; indice++)
-    {
-        if (tableau[indice] > maximum)
-            maximum = tableau[indice];
-    }
-
-    return (maximum);
+	for (i = 1; i < size; i++)
+	{
+		if (array[i] > max) /* Si on trouve un élément plus grand, on met à jour max */
+			max = array[i];
+	}
+	return (max);
 }
 
 /**
- * tri_comptage_chiffre - Trie le tableau en fonction d’un chiffre particulier
- * @tableau: Le tableau de nombres à trier
- * @taille: Le nombre d’éléments dans le tableau
- * @exposant: L'exposant 10^n qui permet d’isoler le chiffre considéré
+ * counting_sort_radix - Trie le tableau en fonction d'un chiffre précis (exposant)
+ * @array: pointeur vers le tableau à trier
+ * @size: nombre d'éléments dans le tableau
+ * @exp: exposant indiquant le chiffre à trier (1 = unités, 10 = dizaines, etc.)
  *
- * Cette fonction est une variante du tri par comptage.
- * Elle trie uniquement en fonction d’un chiffre du nombre (unités, dizaines, centaines...).
- * Par exemple : avec exposant = 10, on trie par rapport au chiffre des dizaines.
+ * Cette fonction implémente un tri par comptage (Counting Sort) mais appliqué
+ * uniquement sur un chiffre précis (par exemple, d'abord les unités, puis les dizaines...).
+ * Cela permet de trier progressivement sans comparer directement les nombres.
  */
-static void tri_comptage_chiffre(int *tableau, size_t taille, int exposant)
+static void counting_sort_radix(int *array, size_t size, int exp)
 {
-    int *temporaire, compteur[10] = {0};
-    size_t indice;
+	int *output, count[10] = {0}; /* count[] garde le nombre d'occurrences de chaque chiffre (0 à 9) */
+	size_t i;
 
-    // Allocation mémoire pour le tableau trié temporairement
-    temporaire = malloc(sizeof(int) * taille);
-    if (!temporaire)
-        return;
+	output = malloc(sizeof(int) * size);
+	if (!output)
+		return; /* Si l'allocation échoue, on quitte la fonction */
 
-    // Comptage du nombre d’occurrences de chaque chiffre
-    for (indice = 0; indice < taille; indice++)
-        compteur[(tableau[indice] / exposant) % 10]++;
+	/* Comptage du nombre d'occurrences pour chaque chiffre à la position exp */
+	for (i = 0; i < size; i++)
+		count[(array[i] / exp) % 10]++;
 
-    // Transformation en "tableau cumulatif" pour connaître les positions finales
-    for (indice = 1; indice < 10; indice++)
-        compteur[indice] += compteur[indice - 1];
+	/* Transformation du comptage en positions cumulées (tableau d'index) */
+	for (i = 1; i < 10; i++)
+		count[i] += count[i - 1];
 
-    // Placement des éléments dans le tableau temporaire, en partant de la fin
-    for (indice = taille; indice > 0; indice--)
-    {
-        temporaire[compteur[(tableau[indice - 1] / exposant) % 10] - 1] = tableau[indice - 1];
-        compteur[(tableau[indice - 1] / exposant) % 10]--;
-    }
+	/* Construction du tableau trié (de droite à gauche pour garantir la stabilité du tri) */
+	for (i = size; i > 0; i--)
+	{
+		output[count[(array[i - 1] / exp) % 10] - 1] = array[i - 1];
+		count[(array[i - 1] / exp) % 10]--;
+	}
 
-    // Copie du tableau trié dans le tableau d’origine
-    for (indice = 0; indice < taille; indice++)
-        tableau[indice] = temporaire[indice];
+	/* Copie du résultat trié dans le tableau original */
+	for (i = 0; i < size; i++)
+		array[i] = output[i];
 
-    // Libération de la mémoire utilisée par le tableau temporaire
-    free(temporaire);
+	free(output); /* Libération de la mémoire temporaire */
 }
 
 /**
- * tri_radix - Trie un tableau d’entiers avec le tri par base (Radix Sort)
- * @tableau: Le tableau de nombres que l’on veut trier
- * @taille: Le nombre d’éléments dans le tableau
+ * radix_sort - Trie un tableau d'entiers avec l'algorithme Radix Sort (LSD)
+ * @array: pointeur vers le tableau à trier
+ * @size: nombre d'éléments dans le tableau
  *
- * Le tri radix trie les nombres chiffre par chiffre,
- * en commençant par les unités, puis les dizaines, puis les centaines, etc.
+ * L'algorithme LSD (Least Significant Digit) Radix Sort commence par trier
+ * selon le chiffre le moins significatif (unités), puis passe aux dizaines,
+ * centaines, etc. Cela permet un tri efficace pour des entiers positifs.
  */
-void tri_radix(int *tableau, size_t taille)
+void radix_sort(int *array, size_t size)
 {
-    int maximum, exposant;
+	int max, exp;
 
-    if (!tableau || taille < 2)
-        return;
+	if (!array || size < 2)
+		return; /* Rien à trier si tableau nul ou avec moins de 2 éléments */
 
-    // On identifie le plus grand nombre pour savoir combien de chiffres traiter
-    maximum = trouver_maximum(tableau, taille);
-
-    // On trie successivement selon chaque chiffre (unités, dizaines, centaines…)
-    for (exposant = 1; maximum / exposant > 0; exposant *= 10)
-    {
-        tri_comptage_chiffre(tableau, taille, exposant);
-    print_array(tableau, taille); // Affiche le tableau à chaque étape
-    }
+	max = get_max(array, size); /* Trouver la plus grande valeur pour connaître le nombre de chiffres */
+	for (exp = 1; max / exp > 0; exp *= 10)
+	{
+		counting_sort_radix(array, size, exp); /* Tri par le chiffre correspondant à exp */
+		print_array(array, size); /* Affichage après chaque étape pour visualiser la progression */
+	}
 }
