@@ -1,7 +1,7 @@
-#ifndef SORT_H   /* Empêche que ce fichier soit inclus plusieurs fois dans le projet */
+#ifndef SORT_H
 #define SORT_H
 
-#include <stddef.h>  /* Fournit la définition de size_t, un type pour représenter les tailles et les index */
+#include <stddef.h>
 
 /**
  * print_array - Affiche le contenu d'un tableau d'entiers
@@ -20,10 +20,10 @@ void print_array(const int *array, size_t size);
  * @size: nombre d'éléments dans le tableau
  *
  * Le tri par base (Radix Sort) est un algorithme efficace pour trier
- * des entiers. Il trie les nombres en fonction de leurs chiffres, 
+ * des entiers. Il trie les nombres en fonction de leurs chiffres,
  * en commençant par le chiffre le moins significatif jusqu'au plus
  * significatif. Ce tri est stable et non comparatif.
  */
 void radix_sort(int *array, size_t size);
 
-#endif /* SORT_H - Fin de la protection contre les inclusions multiples */
+#endif

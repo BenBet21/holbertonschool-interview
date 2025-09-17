@@ -1,17 +1,6 @@
-
 #include "sort.h"
 #include <stdlib.h>
 
-/**
- * get_max - Trouve la valeur maximale dans un tableau
- * @array: pointeur vers le tableau d'entiers
- * @size: nombre d'éléments dans le tableau
- * Return: la plus grande valeur trouvée
- *
- * Cette fonction parcourt le tableau pour identifier l'élément le plus grand.
- * Elle est utilisée dans l'algorithme Radix Sort afin de savoir jusqu'à
- * quel chiffre il faut trier.
- */
 /**
  * get_max - Finds the maximum value in an array
  * @array: Pointer to the array
@@ -22,11 +11,11 @@
 static int get_max(int *array, size_t size)
 {
 	size_t i;
-	int max = array[0]; /* On suppose que le premier élément est le plus grand au départ */
+	int max = array[0]; /* On suppose que le 1erélément est le +gd au départ */
 
 	for (i = 1; i < size; i++)
 	{
-		if (array[i] > max) /* Si on trouve un élément plus grand, on met à jour max */
+		if (array[i] > max) /* Si on trouve un élément +gd on maj max */
 			max = array[i];
 	}
 	return (max);
@@ -67,15 +56,6 @@ static void counting_sort_radix(int *array, size_t size, int exp)
 	free(output);
 }
 
-/**
- * radix_sort - Trie un tableau d'entiers avec l'algorithme Radix Sort (LSD)
- * @array: pointeur vers le tableau à trier
- * @size: nombre d'éléments dans le tableau
- *
- * L'algorithme LSD (Least Significant Digit) Radix Sort commence par trier
- * selon le chiffre le moins significatif (unités), puis passe aux dizaines,
- * centaines, etc. Cela permet un tri efficace pour des entiers positifs.
- */
 /**
  * radix_sort - Sorts an array of integers using LSD Radix Sort
  * @array: Pointer to the array to sort
