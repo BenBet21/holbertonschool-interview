@@ -1,27 +1,10 @@
 #include <stddef.h>
 #include <stdio.h>
-#include <stdlib.h>
+
 #include "sort.h"
-
-/**
- * print_tableau - Affiche les éléments d'un tableau d'entiers
- * @tableau: Le tableau à afficher
- * @taille: Le nombre d'éléments dans le tableau
- *
- * Affiche les éléments séparés par une virgule et un espace.
- */
-void print_array(const int *array, size_t size)
-{
-    size_t i;
-    for (i = 0; i < size; i++)
-    {
-        if (i > 0)
-            printf(", ");
-        printf("%d", array[i]);
-    }
-    printf("\n");
-}
-
+#include <stdlib.h>
+#include <stddef.h>
+#include <stdio.h>
 /**
  * trouver_maximum - Cherche la plus grande valeur dans un tableau
  * @tableau: Le tableau de nombres dans lequel on va chercher
