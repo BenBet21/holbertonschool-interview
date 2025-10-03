@@ -3,6 +3,7 @@
 Log parsing script that computes metrics from stdin
 """
 import sys
+import re
 
 
 def print_stats(total_size, status_codes):
@@ -32,27 +33,18 @@ def parse_line(line):
     Returns:
         tuple: (status_code, file_size) or (None, None) if invalid
     """
+    # Pattern plus flexible pour matcher le format
+    pattern = r'^(\S+) - \[(.*?)\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)(\s*)$'
+    
+    match = re.match(pattern, line.strip())
+    if not match:
+        return None, None
+    
     try:
-        line = line.strip()
-        
-        # Vérifier le format de base avec split
-        parts = line.split()
-        if len(parts) < 7:
-            return None, None
-        
-        # Vérifier que la ligne contient les éléments requis
-        if not ('" "GET' in line and '/projects/260 HTTP/1.1"' in line):
-            return None, None
-        
-        # Extraire les deux derniers éléments (status code et file size)
-        try:
-            status_code = int(parts[-2])
-            file_size = int(parts[-1])
-            return status_code, file_size
-        except (ValueError, IndexError):
-            return None, None
-            
-    except Exception:
+        status_code = int(match.group(3))
+        file_size = int(match.group(4))
+        return status_code, file_size
+    except (ValueError, IndexError):
         return None, None
 
 
