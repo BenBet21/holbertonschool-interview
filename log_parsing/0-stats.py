@@ -1,0 +1,85 @@
+#!/usr/bin/python3
+"""
+Log parsing script that computes metrics from stdin
+"""
+import sys
+import re
+
+
+def print_stats(total_size, status_codes):
+    """
+    Print the current statistics
+    
+    Args:
+        total_size: Total file size accumulated
+        status_codes: Dictionary of status codes and their counts
+    """
+    print("File size: {}".format(total_size))
+    
+    # Print status codes in ascending order
+    valid_codes = [200, 301, 400, 401, 403, 404, 405, 500]
+    for code in valid_codes:
+        if code in status_codes and status_codes[code] > 0:
+            print("{}: {}".format(code, status_codes[code]))
+
+
+def parse_line(line):
+    """
+    Parse a log line and extract status code and file size
+    
+    Args:
+        line: The log line to parse
+        
+    Returns:
+        tuple: (status_code, file_size) or (None, None) if invalid
+    """
+    # Pattern pour matcher le format exact
+    pattern = r'^(\S+) - \[(.*?)\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)$'
+    
+    match = re.match(pattern, line.strip())
+    if not match:
+        return None, None
+    
+    try:
+        status_code = int(match.group(3))
+        file_size = int(match.group(4))
+        return status_code, file_size
+    except ValueError:
+        return None, None
+
+
+def main():
+    """
+    Main function that processes stdin line by line
+    """
+    total_size = 0
+    status_codes = {}
+    line_count = 0
+    
+    try:
+        for line in sys.stdin:
+            status_code, file_size = parse_line(line)
+            
+            # Si la ligne est valide, mettre à jour les stats
+            if status_code is not None and file_size is not None:
+                total_size += file_size
+                
+                # Compter seulement les codes de statut valides
+                valid_codes = [200, 301, 400, 401, 403, 404, 405, 500]
+                if status_code in valid_codes:
+                    status_codes[status_code] = status_codes.get(status_code, 0) + 1
+            
+            line_count += 1
+            
+            # Afficher les stats toutes les 10 lignes
+            if line_count % 10 == 0:
+                print_stats(total_size, status_codes)
+                
+    except KeyboardInterrupt:
+        # Afficher les stats finales lors d'une interruption
+        print_stats(total_size, status_codes)
+        raise
+
+
+if __name__ == "__main__":
+    main()
