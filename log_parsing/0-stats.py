@@ -74,6 +74,10 @@ def main():
             # Afficher les stats toutes les 10 lignes
             if line_count % 10 == 0:
                 print_stats(total_size, status_codes)
+        
+        # Afficher les stats finales si on a traité des lignes mais pas un multiple de 10
+        if line_count % 10 != 0:
+            print_stats(total_size, status_codes)
                 
     except KeyboardInterrupt:
         # Afficher les stats finales lors d'une interruption
