@@ -76,7 +76,8 @@ def main():
                 print_stats(total_size, status_codes)
         
         # Afficher les stats finales si on a traité des lignes mais pas un multiple de 10
-        if line_count % 10 != 0:
+        # OU si le fichier est complètement vide (line_count == 0)
+        if line_count % 10 != 0 or line_count == 0:
             print_stats(total_size, status_codes)
                 
     except KeyboardInterrupt:
