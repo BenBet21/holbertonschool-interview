@@ -34,7 +34,7 @@ def parse_line(line):
         tuple: (status_code, file_size) or (None, None) if invalid
     """
     # Pattern plus flexible pour matcher le format
-    pattern = r'^(\S+) - \[(.*?)\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)(\s*)$'
+    pattern = r'^(\S+) - \[(.*?)\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)$'
     
     match = re.match(pattern, line.strip())
     if not match:
