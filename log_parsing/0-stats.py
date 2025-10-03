@@ -33,18 +33,18 @@ def parse_line(line):
     Returns:
         tuple: (status_code, file_size) or (None, None) if invalid
     """
-    # Pattern plus permissif pour matcher différentes variations du format
-    pattern = r'^\S+\s+-\s+\[.*?\]\s+"GET\s+/projects/260\s+HTTP/1\.1"\s+(\d+)\s+(\d+)\s*$'
+    # Pattern plus flexible pour matcher le format
+    pattern = r'^(\S+) - \[(.*?)\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)(\s*)$'
     
     match = re.match(pattern, line.strip())
     if not match:
         return None, None
     
     try:
-        status_code = int(match.group(1))
-        file_size = int(match.group(2))
+        status_code = int(match.group(3))
+        file_size = int(match.group(4))
         return status_code, file_size
-    except ValueError:
+    except (ValueError, IndexError):
         return None, None
 
 
