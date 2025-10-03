@@ -55,13 +55,16 @@ def main():
     total_size = 0
     status_codes = {}
     line_count = 0
+    valid_line_count = 0
     
     try:
         for line in sys.stdin:
+            line_count += 1
             status_code, file_size = parse_line(line)
             
             # Si la ligne est valide, mettre à jour les stats
             if status_code is not None and file_size is not None:
+                valid_line_count += 1
                 total_size += file_size
                 
                 # Compter seulement les codes de statut valides
@@ -69,14 +72,11 @@ def main():
                 if status_code in valid_codes:
                     status_codes[status_code] = status_codes.get(status_code, 0) + 1
             
-            line_count += 1
-            
-            # Afficher les stats toutes les 10 lignes
+            # Afficher les stats toutes les 10 lignes (valides ou non)
             if line_count % 10 == 0:
                 print_stats(total_size, status_codes)
         
-        # Afficher les stats finales si on a traité des lignes mais pas un multiple de 10
-        # OU si le fichier est complètement vide (line_count == 0)
+        # Afficher les stats finales dans tous les cas
         if line_count % 10 != 0 or line_count == 0:
             print_stats(total_size, status_codes)
                 
