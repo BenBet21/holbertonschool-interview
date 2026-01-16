@@ -5,5 +5,6 @@
 #include <stdio.h>
 
 void menger(int level);
+void print_row(int row, int size);
 
 #endif
