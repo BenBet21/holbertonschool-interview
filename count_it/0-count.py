@@ -4,7 +4,8 @@
 import requests
 
 
-def count_words(subreddit, word_list, after=None, word_count=None, duplicates=None):
+def count_words(subreddit, word_list, after=None,
+                word_count=None, duplicates=None):
     """Print counts of words from word_list found in subreddit hot titles."""
     if word_count is None:
         word_count = {}
@@ -53,7 +54,8 @@ def count_words(subreddit, word_list, after=None, word_count=None, duplicates=No
 
     next_after = data.get("after")
     if next_after is not None:
-        return count_words(subreddit, word_list, next_after, word_count, duplicates)
+        return count_words(subreddit, word_list,
+                           next_after, word_count, duplicates)
 
     sorted_items = sorted(
         word_count.items(),
